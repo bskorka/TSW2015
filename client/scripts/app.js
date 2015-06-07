@@ -144,10 +144,6 @@ $(function () {
         }
     });
 
-
-
-
-
     function createShootMarker(x, y, text) {
         var $shoot = $('<div class="shoot">');
 
@@ -244,7 +240,6 @@ $(function () {
         $loginScreen.hide();
         $roomListScreen.hide();
         $gameScreen.show();
-
 
         preparePlayerBoard();
         prepareEnemyBoard();
