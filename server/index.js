@@ -126,9 +126,9 @@ function createRoom() {
 }
 
 
-//app.use(express.static('client/dist'));
+app.use(express.static('client/dist'));
 
 var port = process.env.PORT || 3000;
 server.listen(port, function() {
-    console.log("App listen on" + port)
+    console.log("App listen on " + port)
 });
