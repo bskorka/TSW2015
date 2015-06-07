@@ -22,7 +22,7 @@
     <favorites_list name="Battleship" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.47149643">
+    <splitter split-orientation="horizontal" split-proportion="0.4696505">
       <split-first>
         <leaf>
           <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
@@ -41,7 +41,7 @@
           <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/server/index.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.78519857">
+                <state vertical-scroll-proportion="4.0505414">
                   <caret line="132" column="31" selection-start-line="132" selection-start-column="31" selection-end-line="132" selection-end-column="31" />
                   <folding />
                 </state>
@@ -533,7 +533,7 @@
       <workItem from="1433630553282" duration="2044000" />
       <workItem from="1433636160875" duration="30000" />
       <workItem from="1433660828761" duration="24671000" />
-      <workItem from="1433690430211" duration="10915000" />
+      <workItem from="1433690430211" duration="11289000" />
     </task>
     <task id="LOCAL-00001" summary="package change&#10;">
       <created>1433693568867</created>
@@ -569,7 +569,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52782000" />
+    <option name="totallyTimeSpent" value="53156000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -950,7 +950,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.78519857">
+        <state vertical-scroll-proportion="4.0505414">
           <caret line="132" column="31" selection-start-line="132" selection-start-column="31" selection-end-line="132" selection-end-column="31" />
           <folding />
         </state>
