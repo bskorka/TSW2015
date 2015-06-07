@@ -126,6 +126,6 @@ function createRoom() {
 }
 
 
-app.use(express.static('client/dist'));
+//app.use(express.static('client/dist'));
 
-server.listen(3000);
+//server.listen(3000);
