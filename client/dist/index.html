@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div class="screen" id="login-screen">
+
+    <div class="form-group" id="login-form">
+        <label class="control-label" for="nick">Podaj swoj nick</label>
+        <input type="text" name="nick" class="form-control"/>
+        <span class="control-label validation-msg"></span>
+    </div>
+
+    <span class="valid-msg" style="display: none"></span>
+
+
+    <input type="button" name="save" value="Zapisz" class="btn btn-default"/>
+
+</div>
+
+<div class="screen" id="room-list-screen">
+    <ul id="room-list">
+
+    </ul>
+</div>
+
+<div class="screen" id="game-screen">
+    <div id="game-view">
+        <div id="player-board"></div>
+        <div id="enemy-board-container">
+            <div id="enemy-board"></div>
+        </div>
+        <div id="ship-dock"></div>
+    </div>
+    <div id="game-screen-buttons">
+        <input type="button" class="btn btn-danger" name="ready" value="Ready!" disabled/>
+
+        <span id="waiting-for-enemy" style="display: none;">
+            <i class="fa fa-spinner fa-pulse" ></i> waiting for enemy!
+        </span>
+    </div>
+</div>
+
+<script src="bundle.js"></script>
+</body>
+</html>

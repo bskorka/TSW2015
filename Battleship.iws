@@ -141,10 +141,10 @@
         <option value="$PROJECT_DIR$/client/styles/main.less" />
         <option value="$PROJECT_DIR$/client/dist/index.html" />
         <option value="$PROJECT_DIR$/client/scripts/app.js" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/Procfile" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/server/index.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -533,7 +533,7 @@
       <workItem from="1433630553282" duration="2044000" />
       <workItem from="1433636160875" duration="30000" />
       <workItem from="1433660828761" duration="24671000" />
-      <workItem from="1433690430211" duration="10254000" />
+      <workItem from="1433690430211" duration="10307000" />
     </task>
     <task id="LOCAL-00001" summary="package change&#10;">
       <created>1433693568867</created>
@@ -569,7 +569,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52121000" />
+    <option name="totallyTimeSpent" value="52174000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -889,14 +889,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.030797102">
-          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/dist/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.153846">
@@ -944,6 +936,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.12878788">
           <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Battleship.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="13" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
           <folding />
         </state>
       </provider>
