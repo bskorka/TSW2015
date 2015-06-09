@@ -86,7 +86,10 @@
 	    var $enemyBoardContainer = $gameScreen.find('#enemy-board-container');
 	    var $gameScreenBtns = $gameScreen.find('#game-screen-buttons');
 	    var $gameScreenRes = $gameScreen.find('#game-screen-results');
-	    var $gameScreenSpinner = $gameScreen.find('#game-screen-buttons #waiting-for-enemy');
+	    var gameResultDiv = $gameScreenRes.find('#result');
+	    var $gameScreenSpinner = $gameScreenBtns.find('#waiting-for-enemy');
+	
+	    var $resultsSpinner = $gameScreenRes.find("#waiting-for-revenge");
 	
 	    socket.on('rooms_refreshed', function (rooms) {
 	        var $rooms = rooms.map(function (room, idx) {
@@ -166,6 +169,16 @@
 	        }
 	    });
 	
+	    socket.on('revenge', function (room) {
+	        var $revengeBtn = $gameScreenRes.find('input[name="revenge"]')
+	        $revengeBtn.prop("disabled", false);
+	        gameResultDiv.removeClass();
+	        gameResultDiv.text('');
+	        $resultsSpinner.hide();
+	
+	        showRevengeGame();
+	    });
+	
 	    socket.on('trafiony', function (data) {
 	        if (currentRoom && data.roomId === currentRoom.id && data.playerName !== myName) {
 	            $enemyBoard.append(createShootMarker(data.x, data.y, '?'));
@@ -186,30 +199,28 @@
 	
 	    socket.on('game_over', function (data) {
 	        if(currentRoom && data.roomId === currentRoom.id) {
+	
 	            $playerBoard.hide();
-	            $enemyBoard.hide();
+	            $enemyBoardContainer.hide();
+	
 	            if (data.playerName !== myName) {
-	                $gameScreenRes.find('#result').addClass("alert alert-success");
-	                $gameScreenRes.find('#result').text("Congratulations! You win!");
+	                gameResultDiv.addClass("alert alert-success");
+	                gameResultDiv.text("Congratulations! You win!");
 	            } else {
-	                $gameScreenRes.find('#result').addClass("alert alert-danger");
-	                $gameScreenRes.find('#result').text("Unfortunately! You lose!");
+	                gameResultDiv.addClass("alert alert-danger");
+	                gameResultDiv.text("Unfortunately! You lose!");
 	            }
+	
 	            $gameScreenRes.show();
+	
+	            var $revengeBtn = $gameScreenRes.find('input[name="revenge"]');
+	            $revengeBtn.on('click', function () {
+	                socket.emit('revenge_ready', currentRoom.id);
+	                $resultsSpinner.show();
+	                $revengeBtn.prop("disabled", true);
+	            });
 	        }
 	    });
-	
-	    function createShootMarker(x, y, text) {
-	        var $shoot = $('<div class="shoot">');
-	
-	        $shoot.text(text);
-	
-	        $shoot.css({
-	            left: x * cellSize,
-	            top: y * cellSize
-	        });
-	        return $shoot;
-	    }
 	
 	    socket.on('shoot', function (data) {
 	        if (!currentRoom)
@@ -268,7 +279,6 @@
 	                            playerName : myName
 	                        });
 	                    }
-	
 	                }
 	            } else {
 	                socket.emit('pudlo', {
@@ -281,6 +291,17 @@
 	        }
 	    });
 	
+	    function createShootMarker(x, y, text) {
+	        var $shoot = $('<div class="shoot">');
+	
+	        $shoot.text(text);
+	
+	        $shoot.css({
+	            left: x * cellSize,
+	            top: y * cellSize
+	        });
+	        return $shoot;
+	    }
 	
 	    function showLogin() {
 	        socket.emit('refresh_rooms');
@@ -301,11 +322,22 @@
 	        prepareShipDock();
 	    }
 	
+	    function showRevengeGame() {
+	        preparePlayerBoard();
+	        prepareEnemyBoard();
+	        prepareShipDock();
+	
+	        $gameScreenRes.hide();
+	        $playerBoard.show();
+	        $shipDock.show();
+	        $gameScreenBtns.show();
+	        $gameScreen.show();
+	    }
+	
 	    function showRooms() {
 	        $loginScreen.hide();
 	        $roomListScreen.show();
 	    }
-	
 	
 	    function preparePlayerBoard() {
 	
@@ -338,7 +370,6 @@
 	            }
 	        });
 	    }
-	
 	
 	    function prepareEnemyBoard() {
 	        var $cells = _.range(0, 100).map(function (idx) {
@@ -474,7 +505,7 @@
 	
 	                    var thisShipCoordinates = $ship.data('coordinates');
 	                    var items = thisShipCoordinates.map(function (coordinate) {
-	                        return coordinate[0] > 10 || coordinate[1] > 10;
+	                        return coordinate[0] > 9 || coordinate[1] > 9;
 	                    });
 	
 	
@@ -537,14 +568,7 @@
 	        disableDragAndRotation();
 	        $shipDock.hide();
 	        $gameScreenBtns.hide();
-	    }
-	
-	    function battleshipRevenge() {
-	        var $revengeBtn = $gameScreenRes.find('input[name="revenge"]');
-	
-	        $revengeBtn.on('click', function () {
-	
-	        });
+	        $gameScreenSpinner.hide();
 	    }
 	
 	    showLogin();

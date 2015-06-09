@@ -12,10 +12,19 @@ var usersNames = [];
 io.on('connection', function (socket) {
     var userName;
 
-
     function refreshRooms() {
         socket.broadcast.emit('rooms_refreshed', rooms);
         socket.emit('rooms_refreshed', rooms);
+    }
+
+    function checkRoomReady(room) {
+        var player = _.findWhere(room.players, {name: userName});
+        player.isReady = true;
+        if (room.players.length === 2 && _.every(_.pluck(room.players, 'isReady'))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     socket.on('register_name', function (name) {
@@ -29,7 +38,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('refresh_rooms', refreshRooms);
-
 
     socket.on('join_room', function (roomId) {
         var room = _.findWhere(rooms, {id: roomId});
@@ -56,25 +64,20 @@ io.on('connection', function (socket) {
 
     socket.on('im_ready', function (roomId) {
         var room = _.findWhere(rooms, {id: roomId});
-        var player = _.findWhere(room.players, {name: userName});
 
-        player.isReady = true;
-
-        if (room.players.length === 2 && _.every(_.pluck(room.players, 'isReady'))) {
+        if(checkRoomReady(room)){
             socket.broadcast.emit('begin_battle', room);
             socket.emit('begin_battle', room);
-
             room.battle = true;
         }
         refreshRooms();
-    });
+    })
 
     socket.on('shoot', function (data) {
         var room = _.findWhere(rooms, {id: data.roomId});
         var enemy = _.find(room.players, function(player){
             return player.name !== data.playerName;
         });
-
 
         if(room.currentPlayerMove === data.playerName){
             room.currentPlayerMove = enemy.name;
@@ -95,11 +98,33 @@ io.on('connection', function (socket) {
     });
 
     socket.on('game_over', function(data){
+        var room = _.findWhere(rooms, {id: data.roomId});
+        room.battle = false;
+        _.each(room.players, function(el) {
+            el.isReady = false;
+        });
+        refreshRooms();
         socket.emit('game_over', data);
         socket.broadcast.emit('game_over', data);
     });
-});
 
+    socket.on('revenge_ready', function (roomId) {
+        var room = _.findWhere(rooms, {id: roomId});
+
+        if(checkRoomReady(room)){
+            _.each(room.players, function(el) {
+                el.isReady = false;
+            });
+            socket.broadcast.emit('revenge', room);
+            socket.emit('revenge', room);
+        }
+        refreshRooms();
+    });
+
+    socket.on('disconnect', function () {
+
+    });
+});
 
 
 

@@ -1,3 +1,5 @@
+ZROBIONE
+
 + Serwowanie folderu /client/ za pomoca express
 + Logowanie/tworzenie pokoju
   + ekran logowania/tworzenia  pokoju
@@ -9,14 +11,16 @@
   + sprawdzanie kolizji z innym statkiem
 + 2 faza gry - wojna
 + warunek koncowy 
-{
   + zablokowanie strzelania na planszy / usuniêcie plansz
   + Wyœwietlenie wyniku w pojawiaj¹cym siê divie? (ready false?)
   + zablokowanie obracania i przenoszenia statków po rozpoczêciu gry
-  wyœwietlenie komunikatu o rewan¿ - jeœli dwóch chêtnych (ready?) i znowu etap ustawiania statków
-}
+  + wyœwietlenie komunikatu o rewan¿ - jeœli dwóch chêtnych (ready?) i znowu etap ustawiania statków
+
+DO ZROBIENIA
 
 - obs³uga wyjœcia z pokoju
+  - przy okazji ogarniêcie disconnecta po zakoñczeniu gry
+  
 - usuwanie pokojów po grze
 - wyœwietlanie koordynatów przy mapce
 - kogo kolej? (bootstrap alert info)
