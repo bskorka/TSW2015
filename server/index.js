@@ -51,7 +51,6 @@ io.on('connection', function (socket) {
             rooms.push(createRoom());
         }
 
-
         refreshRooms();
     });
 
@@ -96,6 +95,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('game_over', function(data){
+        socket.emit('game_over', data);
         socket.broadcast.emit('game_over', data);
     });
 });

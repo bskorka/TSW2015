@@ -8,12 +8,19 @@
   + obracanie
   + sprawdzanie kolizji z innym statkiem
 + 2 faza gry - wojna
-
-+/- warunek koncowy - Nieskoñczone - wymaga do³o¿enia absolutnego zakoñczenia rozgrywki,
-bo mo¿na siê strzelaæ mimo, ¿e jedna osoba przegra³a. Do tego mo¿liwoœc opcji REWAN¯.
++ warunek koncowy 
+{
+  + zablokowanie strzelania na planszy / usuniêcie plansz
+  + Wyœwietlenie wyniku w pojawiaj¹cym siê divie? (ready false?)
+  + zablokowanie obracania i przenoszenia statków po rozpoczêciu gry
+  wyœwietlenie komunikatu o rewan¿ - jeœli dwóch chêtnych (ready?) i znowu etap ustawiania statków
+}
 
 - obs³uga wyjœcia z pokoju
 - usuwanie pokojów po grze
+- wyœwietlanie koordynatów przy mapce
+- kogo kolej? (bootstrap alert info)
+- mo¿e alert z trafi³eœ, strzeli³eœ w?
 - zaznaczanie pokojów w których jest wojna
 - refactoring nazw zmiennych,
 - poprawa mniejszych i wiêkszych bugów

@@ -15,7 +15,7 @@ var io = require('socket.io-client');
 
 var socket = io();
 
-var shipsSizes = [2, 2, 3, 3, 4, 5];
+var shipsSizes = [2];//, 2, 3, 3, 4, 5];
 var currentRoom;
 var myName;
 
@@ -28,7 +28,6 @@ $(function () {
     var $roomListScreen = $('#room-list-screen');
     var $gameScreen = $('#game-screen');
 
-
     var $nickInput = $loginScreen.find('input[name="nick"]');
     var $saveBtn = $loginScreen.find('input[name="save"]');
     var $loginForm = $loginScreen.find('#login-form');
@@ -40,6 +39,7 @@ $(function () {
     var $enemyBoard = $gameScreen.find('#enemy-board');
     var $enemyBoardContainer = $gameScreen.find('#enemy-board-container');
     var $gameScreenBtns = $gameScreen.find('#game-screen-buttons');
+    var $gameScreenRes = $gameScreen.find('#game-screen-results');
     var $gameScreenSpinner = $gameScreen.find('#game-screen-buttons #waiting-for-enemy');
 
     socket.on('rooms_refreshed', function (rooms) {
@@ -139,8 +139,17 @@ $(function () {
     });
 
     socket.on('game_over', function (data) {
-        if (currentRoom && data.roomId === currentRoom.id && data.playerName !== myName) {
-            alert('Wygrales');
+        if(currentRoom && data.roomId === currentRoom.id) {
+            $playerBoard.hide();
+            $enemyBoard.hide();
+            if (data.playerName !== myName) {
+                $gameScreenRes.find('#result').addClass("alert alert-success");
+                $gameScreenRes.find('#result').text("Congratulations! You win!");
+            } else {
+                $gameScreenRes.find('#result').addClass("alert alert-danger");
+                $gameScreenRes.find('#result').text("Unfortunately! You lose!");
+            }
+            $gameScreenRes.show();
         }
     });
 
@@ -457,7 +466,7 @@ $(function () {
     }
 
     function gameIsReady(ready) {
-        var $readyBtn = $gameScreen.find('input[name="ready"]');
+        var $readyBtn = $gameScreenBtns.find('input[name="ready"]');
 
         $readyBtn.on('click', function () {
             socket.emit('im_ready', currentRoom.id);
@@ -468,10 +477,28 @@ $(function () {
         $readyBtn.prop('disabled', !ready);
     }
 
+    function disableDragAndRotation() {
+        var $ships = $playerBoard.find('.ship');
+
+        $ships.each(function(idx, el) {
+            $(el).draggable('disable');
+            $(el).find('.rotate-button').off('click');
+        });
+    }
+
     function startBattle() {
         $enemyBoardContainer.show();
+        disableDragAndRotation();
         $shipDock.hide();
         $gameScreenBtns.hide();
+    }
+
+    function battleshipRevenge() {
+        var $revengeBtn = $gameScreenRes.find('input[name="revenge"]');
+
+        $revengeBtn.on('click', function () {
+
+        });
     }
 
     showLogin();
