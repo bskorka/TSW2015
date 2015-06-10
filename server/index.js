@@ -141,8 +141,8 @@ io.on('connection', function (socket) {
         refreshRooms();
     });
 
-    socket.on('enemy_disconnected', function(room) {
-
+    socket.on('enemy_disconnected', function(data) {
+        socket.broadcast.emit('show_enemy_decision', data);
     });
 
     socket.on('disconnect', function () {

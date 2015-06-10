@@ -91,7 +91,7 @@
 	    var $gameScreenRes = $gameScreen.find('#game-screen-results');
 	    var gameResultDiv = $gameScreenRes.find('#result');
 	    var $backToRoomsBtnRevenge = $gameScreenRes.find('#bTH');
-	
+	    var $decisionBar = $gameScreenRes.find("#revengeDecision");
 	    var $resultsSpinner = $gameScreenRes.find("#waiting-for-revenge");
 	
 	    socket.on('rooms_refreshed', function (rooms) {
@@ -161,6 +161,7 @@
 	    socket.on('joined', function (room) {
 	        console.log('joined', room);
 	        currentRoom = room;
+	        console.log(myName + " joined");
 	        showGame(room);
 	    });
 	
@@ -206,6 +207,7 @@
 	
 	            $playerBoard.hide();
 	            $enemyBoardContainer.hide();
+	            $decisionBar.hide();
 	
 	            if (data.playerName !== myName) {
 	                gameResultDiv.addClass("alert alert-success");
@@ -226,16 +228,17 @@
 	
 	            var $disconnectBtn = $gameScreenRes.find('input[name="disconnect"]');
 	            $disconnectBtn.on('click', function() {
-	                socket.emit('enemy_disconnected', currentRoom);
 	                socket.disconnect();
+	                socket.emit('enemy_disconnected', data);
 	                window.location="/";
 	            });
 	
 	            $backToRoomsBtnRevenge.on('click', function(){
+	                $gameScreen.hide();
 	                $gameScreenRes.hide();
 	                socket.disconnect();
 	                socket.connect();
-	                socket.emit('enemy_disconnected', currentRoom);
+	                socket.emit('enemy_disconnected', data);
 	                socket.emit('register_name', myName);
 	            });
 	        }
@@ -310,6 +313,14 @@
 	        }
 	    });
 	
+	    socket.on('show_enemy_decision', function(data) {
+	        if (currentRoom && data.roomId === currentRoom.id && data.playerName === myName) {
+	            $decisionBar.show();
+	            $decisionBar.text("Your enemy disconnected! Please leave the room!")
+	            $decisionBar.addClass("alert alert-warning")
+	        }
+	    });
+	
 	    function createShootMarker(x, y, text) {
 	
 	        var $shoot = $('<div class="shoot">');
@@ -345,6 +356,9 @@
 	        $loginScreen.hide();
 	        $roomListScreen.hide();
 	        $gameScreen.show();
+	        $playerBoard.show();
+	        $shipDock.show();
+	        $gameScreenBtns.show();
 	
 	        preparePlayerBoard();
 	        prepareEnemyBoard();
