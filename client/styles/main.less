@@ -18,7 +18,8 @@ div {
     .cell {
       cursor: pointer;
       &:hover {
-        background-color: hotpink;
+        //background-color: red;
+        background-image: url("cannon.png");
       }
     }
     
@@ -56,7 +57,7 @@ div {
       display: flex;
       flex-wrap: wrap;
       overflow: hidden;
-      background-color: #0000ed;
+      background-color: darkslategray;
       margin : 4px;
       width : calc(~'100% - 8px');
       height : calc(~'100% - 8px');
@@ -70,11 +71,15 @@ div {
       cursor: pointer;
       display: none;
       position: absolute;
-      background-color: pink;
-      width: 10px;
-      height: 10px;
+      background-color: orange;
+      width: 16px;
+      height: 16px;
       bottom: -2px;
       right: -2px;
+    }
+
+    .glyphicon {
+      padding: 1px;
     }
 
   }

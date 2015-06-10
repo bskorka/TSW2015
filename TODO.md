@@ -12,19 +12,27 @@ ZROBIONE
 + 2 faza gry - wojna
 + warunek koncowy 
   + zablokowanie strzelania na planszy / usuniêcie plansz
-  + Wyœwietlenie wyniku w pojawiaj¹cym siê divie? (ready false?)
+  + Wyœwietlenie wyniku w pojawiaj¹cym siê divie - (isReady: false)
   + zablokowanie obracania i przenoszenia statków po rozpoczêciu gry
-  + wyœwietlenie komunikatu o rewan¿ - jeœli dwóch chêtnych (ready?) i znowu etap ustawiania statków
+  + wyœwietlenie komunikatu o rewan¿ - jeœli dwóch chêtnych (isReady) i znowu etap ustawiania statków
++ glyphicon do obrotu statków
 
 DO ZROBIENIA
 
 - obs³uga wyjœcia z pokoju
-  - przy okazji ogarniêcie disconnecta po zakoñczeniu gry
+  + obs³uga wyjœcia u¿ytkownika i czyszczenie pokoju, ¿eby nie blokowa³
+  + przy okazji ogarniêcie disconnecta po zakoñczeniu gry, bo na razie to przycisk bez u¿ycia
+  - kiedy drugi gracz klika disconnect to wtedy wychodzi z pokoju, a gracz, który chcia³ rewan¿
+    dostaje o tym informacjê i wyœwietla siê przycisk powrotu do listy pokojów
+  + wyjœcie z pokoju po do³¹czeniu
+  + mo¿liwoœæ do³¹czenia do pokoju jak by³y dwie osoby ju¿ (joinBtn)
+  + schowanie waiting for enemy jak inny gracz nacisn¹³ ready i wyszed³
   
 - usuwanie pokojów po grze
+
 - wyœwietlanie koordynatów przy mapce
 - kogo kolej? (bootstrap alert info)
-- mo¿e alert z trafi³eœ, strzeli³eœ w?
+- ikonki - strza³, pud³o, traf, zatopienie
 - zaznaczanie pokojów w których jest wojna
 - refactoring nazw zmiennych,
 - poprawa mniejszych i wiêkszych bugów

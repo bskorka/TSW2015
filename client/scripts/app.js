@@ -22,26 +22,29 @@ var myName;
 var cellSize = 30;
 var padding = 4;
 
-
 $(function () {
     var $loginScreen = $('#login-screen');
     var $roomListScreen = $('#room-list-screen');
-    var $gameScreen = $('#game-screen');
 
+    var $gameScreen = $('#game-screen');
     var $nickInput = $loginScreen.find('input[name="nick"]');
     var $saveBtn = $loginScreen.find('input[name="save"]');
+
     var $loginForm = $loginScreen.find('#login-form');
 
     var $roomList = $roomListScreen.find('#room-list');
-
     var $playerBoard = $gameScreen.find('#player-board');
     var $shipDock = $gameScreen.find('#ship-dock');
     var $enemyBoard = $gameScreen.find('#enemy-board');
     var $enemyBoardContainer = $gameScreen.find('#enemy-board-container');
+
     var $gameScreenBtns = $gameScreen.find('#game-screen-buttons');
+    var $gameScreenSpinner = $gameScreenBtns.find('#waiting-for-enemy');
+
+    var $backToRoomsBtn = $gameScreenBtns.find("#bTRL");
     var $gameScreenRes = $gameScreen.find('#game-screen-results');
     var gameResultDiv = $gameScreenRes.find('#result');
-    var $gameScreenSpinner = $gameScreenBtns.find('#waiting-for-enemy');
+    var $backToRoomsBtnRevenge = $gameScreenRes.find('#bTH');
 
     var $resultsSpinner = $gameScreenRes.find("#waiting-for-revenge");
 
@@ -55,7 +58,7 @@ $(function () {
             var $players = $('<span>');
 
             if (room.players.length === 1) {
-                $players.text(room.players[0].name + ' is waiting for oponent');
+                $players.text(room.players[0].name + ' is waiting for opponent');
             } else if (room.players.length === 2) {
                 $players.text(_.pluck(room.players, 'name').join(" vs "));
             } else {
@@ -124,13 +127,14 @@ $(function () {
     });
 
     socket.on('revenge', function (room) {
-        var $revengeBtn = $gameScreenRes.find('input[name="revenge"]')
-        $revengeBtn.prop("disabled", false);
-        gameResultDiv.removeClass();
-        gameResultDiv.text('');
-        $resultsSpinner.hide();
-
-        showRevengeGame();
+        if (currentRoom && room.id === currentRoom.id) {
+            var $revengeBtn = $gameScreenRes.find('input[name="revenge"]')
+            $revengeBtn.prop("disabled", false);
+            gameResultDiv.removeClass();
+            gameResultDiv.text('');
+            $resultsSpinner.hide();
+            showRevengeGame();
+        }
     });
 
     socket.on('trafiony', function (data) {
@@ -172,6 +176,21 @@ $(function () {
                 socket.emit('revenge_ready', currentRoom.id);
                 $resultsSpinner.show();
                 $revengeBtn.prop("disabled", true);
+            });
+
+            var $disconnectBtn = $gameScreenRes.find('input[name="disconnect"]');
+            $disconnectBtn.on('click', function() {
+                socket.emit('enemy_disconnected', currentRoom);
+                socket.disconnect();
+                window.location="/";
+            });
+
+            $backToRoomsBtnRevenge.on('click', function(){
+                $gameScreenRes.hide();
+                socket.disconnect();
+                socket.connect();
+                socket.emit('enemy_disconnected', currentRoom);
+                socket.emit('register_name', myName);
             });
         }
     });
@@ -246,10 +265,10 @@ $(function () {
     });
 
     function createShootMarker(x, y, text) {
+
         var $shoot = $('<div class="shoot">');
 
         $shoot.text(text);
-
         $shoot.css({
             left: x * cellSize,
             top: y * cellSize
@@ -257,10 +276,20 @@ $(function () {
         return $shoot;
     }
 
+    function backToRooms() {
+        $backToRoomsBtn.on('click', function(){
+            $gameScreen.hide();
+            $gameScreenSpinner.hide();
+            socket.disconnect();
+            socket.connect();
+            socket.emit('register_name', myName);
+        });
+    }
+
     function showLogin() {
         socket.emit('refresh_rooms');
-        $loginScreen.show();
 
+        $loginScreen.show();
         $saveBtn.on('click', function () {
             socket.emit('register_name', $nickInput.val());
         });
@@ -279,8 +308,8 @@ $(function () {
     function showRevengeGame() {
         preparePlayerBoard();
         prepareEnemyBoard();
-        prepareShipDock();
 
+        prepareShipDock();
         $gameScreenRes.hide();
         $playerBoard.show();
         $shipDock.show();
@@ -295,6 +324,7 @@ $(function () {
 
     function preparePlayerBoard() {
 
+
         var $cells = _.range(0, 100).map(function (idx) {
             var $cell = $('<div class="cell">');
 
@@ -303,10 +333,9 @@ $(function () {
 
             return $cell;
         });
-
         $playerBoard.empty();
-        $playerBoard.append($cells);
 
+        $playerBoard.append($cells);
         $playerBoard.droppable({
             drop: function (ev, obj) {
                 var $ship = obj.draggable;
@@ -326,6 +355,7 @@ $(function () {
     }
 
     function prepareEnemyBoard() {
+
         var $cells = _.range(0, 100).map(function (idx) {
             var $cell = $('<div class="cell">');
 
@@ -343,12 +373,12 @@ $(function () {
 
             return $cell;
         });
-
         $enemyBoard.empty();
         $enemyBoard.append($cells);
     }
 
     function prepareShipDock() {
+
 
         var $ships = shipsSizes.map(function (shipSize) {
 
@@ -361,7 +391,7 @@ $(function () {
 
             $ship.css({width: cellSize, height: (shipSize * cellSize)});
 
-            var $rotateButton = $('<div class="rotate-button">');
+            var $rotateButton = $('<div class="rotate-button glyphicon glyphicon-refresh">');
 
             $rotateButton.on('click', function () {
                 var currentWidth = $ship.css('width');
@@ -434,7 +464,6 @@ $(function () {
 
             return $ship
         });
-
         $shipDock.empty();
         $shipDock.append($ships);
     }
@@ -442,6 +471,7 @@ $(function () {
     function checkCollisions() {
 
         function checkCollision($ship, $ships) {
+
             var results = [];
 
             $ships.each(function (idx, el) {
@@ -466,12 +496,13 @@ $(function () {
                     results = results.concat(results, items);
                 }
             });
-
             console.log(results)
             return _.any(results);
         }
 
+
         var $ships = $playerBoard.find('.ship');
+
 
         var collisions = $ships.map(function (idx, el) {
             var $ship = $(el);
@@ -485,22 +516,20 @@ $(function () {
 
             return hasCollision;
         });
-
-
         return _.any(collisions);
     }
 
     function shipsOnBoard() {
-        var shipsOnBoardCount = $playerBoard.find('.ship').length;
 
+        var shipsOnBoardCount = $playerBoard.find('.ship').length;
         return shipsSizes.length === shipsOnBoardCount;
     }
 
     function gameIsReady(ready) {
         var $readyBtn = $gameScreenBtns.find('input[name="ready"]');
-
         $readyBtn.on('click', function () {
             socket.emit('im_ready', currentRoom.id);
+            $backToRoomsBtn.prop('disabled', true);
             $readyBtn.prop('disabled', true);
             $gameScreenSpinner.show();
         });
@@ -526,4 +555,5 @@ $(function () {
     }
 
     showLogin();
+    backToRooms();
 });
