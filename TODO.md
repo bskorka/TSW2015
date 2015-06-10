@@ -16,18 +16,17 @@ ZROBIONE
   + zablokowanie obracania i przenoszenia statków po rozpoczêciu gry
   + wyœwietlenie komunikatu o rewan¿ - jeœli dwóch chêtnych (isReady) i znowu etap ustawiania statków
 + glyphicon do obrotu statków
-
-DO ZROBIENIA
-
-- obs³uga wyjœcia z pokoju
++ obs³uga wyjœcia z pokoju
   + obs³uga wyjœcia u¿ytkownika i czyszczenie pokoju, ¿eby nie blokowa³
   + przy okazji ogarniêcie disconnecta po zakoñczeniu gry, bo na razie to przycisk bez u¿ycia
-  - kiedy drugi gracz klika disconnect to wtedy wychodzi z pokoju, a gracz, który chcia³ rewan¿
+  + kiedy drugi gracz klika disconnect to wtedy wychodzi z pokoju, a gracz, który chcia³ rewan¿
     dostaje o tym informacjê i wyœwietla siê przycisk powrotu do listy pokojów
   + wyjœcie z pokoju po do³¹czeniu
   + mo¿liwoœæ do³¹czenia do pokoju jak by³y dwie osoby ju¿ (joinBtn)
   + schowanie waiting for enemy jak inny gracz nacisn¹³ ready i wyszed³
   
+DO ZROBIENIA
+ 
 - usuwanie pokojów po grze
 
 - wyœwietlanie koordynatów przy mapce
