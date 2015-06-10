@@ -3,6 +3,11 @@
 @cell-size : 30px;
 @gap : 4px;
 
+body {
+  background-image: url("background.jpg");
+  background-size: cover;
+}
+
 div {
   box-sizing: border-box;
 }
@@ -18,35 +23,46 @@ div {
     .cell {
       cursor: pointer;
       &:hover {
-        //background-color: red;
         background-image: url("cannon.png");
       }
+    }
+  }
+
+  #game-screen-buttons {
+    margin-top: 20px;
+    margin-left: 30px;
+
+    #waiting-for-enemy {
+      font-weight: 600;
+      font-size: large;
+      color: black;
     }
   }
   
   #game-screen-results {
     display: none;
-    #revengeDecision {
-
-    }
   }
 
   .cell {
     width: @cell-size;
     height: @cell-size;
-    border: 1px solid gray;
+    border: 1px solid black;
   }
 
   #player-board, #enemy-board {
+    background-image: url("board-bg.jpg");
     position: relative;
     display: flex;
     flex-wrap: wrap;
     width: 300px;
     min-width: 300px;
     height: 300px;
+    margin-top: 30px;
+    margin-left: 30px;
   }
 
   #ship-dock {
+    margin-top: 30px;
     vertical-align: top;
   }
 

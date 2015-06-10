@@ -60,6 +60,15 @@ io.on('connection', function (socket) {
     socket.on('refresh_rooms', refreshRooms);
 
     socket.on('join_room', function (roomId) {
+        var freeId = [];
+        if (rooms.length > 2) {
+            _.each(rooms, function (room) {
+                if (room.players.length === 0) {
+                    freeId.push(room.id);
+                }
+            });
+        }
+
         var room = _.findWhere(rooms, {id: roomId});
 
         if (room.free) {
@@ -71,12 +80,16 @@ io.on('connection', function (socket) {
             if (room.players.length === 2) {
                 room.free = false;
                 room.currentPlayerMove = userName;
-                socket.emit('room_full', room.id);
-                rooms.push(createRoom());
+                socket.emit('room_full', room.id)
+                if (freeId.length < 2) {
+                    rooms.push(createRoom());
+                }
             }
         } else {
             socket.emit('room_full', roomId);
-            rooms.push(createRoom());
+            if (freeId.length < 2) {
+                rooms.push(createRoom());
+            }
         }
 
         refreshRooms();
@@ -141,7 +154,7 @@ io.on('connection', function (socket) {
         refreshRooms();
     });
 
-    socket.on('enemy_disconnected', function(data) {
+    socket.on('enemy_disconnected', function (data) {
         socket.broadcast.emit('show_enemy_decision', data);
     });
 

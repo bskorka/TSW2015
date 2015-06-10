@@ -23,16 +23,14 @@ ZROBIONE
     dostaje o tym informacjê i wyœwietla siê przycisk powrotu do listy pokojów
   + wyjœcie z pokoju po do³¹czeniu
   + mo¿liwoœæ do³¹czenia do pokoju jak by³y dwie osoby ju¿ (joinBtn)
-  + schowanie waiting for enemy jak inny gracz nacisn¹³ ready i wyszed³
++ schowanie waiting for enemy jak inny gracz nacisn¹³ ready i wyszed³
++ poprawa przycisku back to rooms, z poziomu gry (deaktywuje siê)
++ kontrola iloœci pokojów
   
 DO ZROBIENIA
- 
-- usuwanie pokojów po grze
 
-- wyœwietlanie koordynatów przy mapce
 - kogo kolej? (bootstrap alert info)
 - ikonki - strza³, pud³o, traf, zatopienie
-- zaznaczanie pokojów w których jest wojna
 - refactoring nazw zmiennych,
 - poprawa mniejszych i wiêkszych bugów
 - wygl¹d aplikacji

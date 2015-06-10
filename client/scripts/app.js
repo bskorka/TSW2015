@@ -58,9 +58,9 @@ $(function () {
             var $players = $('<span>');
 
             if (room.players.length === 1) {
-                $players.text(room.players[0].name + ' is waiting for opponent');
+                $players.text(' ' + room.players[0].name + ' is waiting for opponent');
             } else if (room.players.length === 2) {
-                $players.text(_.pluck(room.players, 'name').join(" vs "));
+                $players.text(_.pluck(room.players, ' name').join(" vs "));
             } else {
                 $players.text(' (empty) ');
             }
@@ -312,6 +312,7 @@ $(function () {
         $gameScreen.show();
         $playerBoard.show();
         $shipDock.show();
+        $backToRoomsBtn.prop('disabled', false);
         $gameScreenBtns.show();
 
         preparePlayerBoard();
@@ -337,7 +338,6 @@ $(function () {
     }
 
     function preparePlayerBoard() {
-
 
         var $cells = _.range(0, 100).map(function (idx) {
             var $cell = $('<div class="cell">');
@@ -546,6 +546,7 @@ $(function () {
             $backToRoomsBtn.prop('disabled', true);
             $readyBtn.prop('disabled', true);
             $gameScreenSpinner.show();
+            disableDragAndRotation();
         });
 
         $readyBtn.prop('disabled', !ready);
@@ -562,7 +563,6 @@ $(function () {
 
     function startBattle() {
         $enemyBoardContainer.show();
-        disableDragAndRotation();
         $shipDock.hide();
         $gameScreenBtns.hide();
         $gameScreenSpinner.hide();
