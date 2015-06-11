@@ -26,13 +26,14 @@ ZROBIONE
 + schowanie waiting for enemy jak inny gracz nacisn¹³ ready i wyszed³
 + poprawa przycisku back to rooms, z poziomu gry (deaktywuje siê)
 + kontrola iloœci pokojów
++ poprawa mniejszych i wiêkszych bugów
++ kogo kolej? (bootstrap alert info)
++ ikonki - strza³, pud³o, traf, zatopienie
++ collisionBounds statku który zaton¹³ id="miss"
   
 DO ZROBIENIA
 
-- kogo kolej? (bootstrap alert info)
-- ikonki - strza³, pud³o, traf, zatopienie
-- refactoring nazw zmiennych,
-- poprawa mniejszych i wiêkszych bugów
+- refactoring nazw zmiennych
 - wygl¹d aplikacji
 
 Nie korzystam z oryginalnych socketowych pokojów poniewa¿ zda³em sobie sprawê z mo¿liwoœci ich

@@ -15,11 +15,11 @@ var io = require('socket.io-client');
 
 var socket = io();
 
-var shipsSizes = [2];//, 2, 3, 3, 4, 5];
+var shipsSizes = [2, 2];//, 3, 3, 4, 5];
 var currentRoom;
 var myName;
 
-var cellSize = 30;
+var cellSize = 50;
 var padding = 4;
 
 $(function () {
@@ -37,11 +37,12 @@ $(function () {
     var $shipDock = $gameScreen.find('#ship-dock');
     var $enemyBoard = $gameScreen.find('#enemy-board');
     var $enemyBoardContainer = $gameScreen.find('#enemy-board-container');
-
     var $gameScreenBtns = $gameScreen.find('#game-screen-buttons');
-    var $gameScreenSpinner = $gameScreenBtns.find('#waiting-for-enemy');
 
+    var $gameScreenSpinner = $gameScreenBtns.find('#waiting-for-enemy');
     var $backToRoomsBtn = $gameScreenBtns.find("#bTRL");
+    var $turnDiv = $gameScreen.find('#your-turn');
+
     var $gameScreenRes = $gameScreen.find('#game-screen-results');
     var gameResultDiv = $gameScreenRes.find('#result');
     var $backToRoomsBtnRevenge = $gameScreenRes.find('#bTH');
@@ -108,14 +109,13 @@ $(function () {
         var $room = $roomList.find(selector);
 
         var $joinBtn = $room.find('input[name="join"]');
-
         $joinBtn.prop('disabled', true);
     });
 
     socket.on('joined', function (room) {
         console.log('joined', room);
         currentRoom = room;
-        console.log(myName + " joined");
+
         showGame(room);
     });
 
@@ -123,6 +123,9 @@ $(function () {
         console.log('begin_battle', room);
         if (currentRoom && room.id === currentRoom.id) {
             currentRoom = room;
+            if (currentRoom.currentPlayerMove === myName) {
+                $turnDiv.show();
+            }
             startBattle();
         }
     });
@@ -147,6 +150,17 @@ $(function () {
     socket.on('zatopiony', function (data) {
         if (currentRoom && data.roomId === currentRoom.id && data.playerName !== myName) {
             $enemyBoard.append(createShootMarker(data.x, data.y, '!'));
+            var $b = $(data.bounds);
+            var $c = $(data.coord);
+
+            $.each($b, function (idx, coordinate) {
+                var $coordinate = $(coordinate);
+                var x = $coordinate[0];
+                var y = $coordinate[1];
+                if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
+                    $enemyBoard.append(createShootMarker(x, y, 'X'));
+                }
+            });
         }
     });
 
@@ -157,11 +171,12 @@ $(function () {
     });
 
     socket.on('game_over', function (data) {
-        if(currentRoom && data.roomId === currentRoom.id) {
+        if (currentRoom && data.roomId === currentRoom.id) {
 
             $playerBoard.hide();
             $enemyBoardContainer.hide();
             $decisionBar.hide();
+            $turnDiv.hide();
 
             if (data.playerName !== myName) {
                 gameResultDiv.addClass("alert alert-success");
@@ -181,13 +196,13 @@ $(function () {
             });
 
             var $disconnectBtn = $gameScreenRes.find('input[name="disconnect"]');
-            $disconnectBtn.on('click', function() {
+            $disconnectBtn.on('click', function () {
                 socket.disconnect();
                 socket.emit('enemy_disconnected', data);
-                window.location="/";
+                window.location = "/";
             });
 
-            $backToRoomsBtnRevenge.on('click', function(){
+            $backToRoomsBtnRevenge.on('click', function () {
                 $gameScreen.hide();
                 $gameScreenRes.hide();
                 socket.disconnect();
@@ -207,8 +222,7 @@ $(function () {
             var x = data.x;
             var y = data.y;
 
-
-            $playerBoard.append(createShootMarker(x, y));
+            $turnDiv.show();
 
             var $hitShip;
 
@@ -224,7 +238,6 @@ $(function () {
                 }
             });
 
-
             if ($hitShip) {
                 var coordinates = $hitShip.data('coordinates');
                 var hitCount = $hitShip.data('hitCount') || 0;
@@ -232,7 +245,7 @@ $(function () {
 
                 hitCount = hitCount + 1;
                 $hitShip.data('hitCount', hitCount);
-
+                $playerBoard.append(createShootMarker(x, y, '?'));
                 socket.emit('trafiony', {
                     roomId: currentRoom.id,
                     playerName: myName,
@@ -240,23 +253,39 @@ $(function () {
                     y: y
                 });
                 if (hitCount === shipSize) {
+                    var $boundsSunkShip = $hitShip.data('collisionBounds');
+
+                    $playerBoard.append(createShootMarker(x, y, '!'));
                     socket.emit('zatopiony', {
                         roomId: currentRoom.id,
                         playerName: myName,
                         x: x,
-                        y: y
+                        y: y,
+                        bounds: $boundsSunkShip,
+                        coord: coordinates
+                    });
+
+                    $.each($boundsSunkShip, function (idx, coordinate) {
+                        console.log(coordinate);
+                        var $coordinate = $(coordinate);
+                        var x = $coordinate[0];
+                        var y = $coordinate[1];
+                        if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
+                            $playerBoard.append(createShootMarker(x, y, 'X'));
+                        }
                     });
 
                     $hitShip.remove();
 
-                    if($playerBoard.find('.ship').length === 0){
+                    if ($playerBoard.find('.ship').length === 0) {
                         socket.emit('game_over', {
-                            roomId : currentRoom.id,
-                            playerName : myName
+                            roomId: currentRoom.id,
+                            playerName: myName
                         });
                     }
                 }
             } else {
+                $playerBoard.append(createShootMarker(x, y, 'X'));
                 socket.emit('pudlo', {
                     roomId: currentRoom.id,
                     playerName: myName,
@@ -267,7 +296,7 @@ $(function () {
         }
     });
 
-    socket.on('show_enemy_decision', function(data) {
+    socket.on('show_enemy_decision', function (data) {
         if (currentRoom && data.roomId === currentRoom.id && data.playerName === myName) {
             $decisionBar.show();
             $decisionBar.text("Your enemy disconnected! Please leave the room!")
@@ -279,7 +308,14 @@ $(function () {
 
         var $shoot = $('<div class="shoot">');
 
-        $shoot.text(text);
+        if (text === 'X') {
+            $shoot.attr('id', 'miss');
+        } else if (text === '?') {
+            $shoot.attr('id', 'hit')
+        } else if (text === '!') {
+            $shoot.attr('id', 'sunk')
+        }
+
         $shoot.css({
             left: x * cellSize,
             top: y * cellSize
@@ -288,7 +324,7 @@ $(function () {
     }
 
     function backToRooms() {
-        $backToRoomsBtn.on('click', function(){
+        $backToRoomsBtn.on('click', function () {
             $gameScreen.hide();
             $gameScreenSpinner.hide();
             socket.disconnect();
@@ -360,8 +396,8 @@ $(function () {
 
                     $ship.css({
                         'position': 'absolute',
-                        left: obj.offset.left,
-                        top: obj.offset.top
+                        left: obj.offset.left - cellSize,
+                        top: obj.offset.top - cellSize
                     });
                 }
             }
@@ -374,6 +410,7 @@ $(function () {
             var $cell = $('<div class="cell">');
 
             $cell.on('click', function () {
+                $turnDiv.hide();
                 var x = idx % 10;
                 var y = (idx - x) / 10;
 
@@ -392,7 +429,6 @@ $(function () {
     }
 
     function prepareShipDock() {
-
 
         var $ships = shipsSizes.map(function (shipSize) {
 
@@ -525,7 +561,7 @@ $(function () {
             if (hasCollision) {
                 $ship.css('background', 'red');
             } else {
-                $ship.css('background', 'black');
+                $ship.css('background', 'lightgrey');
             }
 
             return hasCollision;
@@ -555,7 +591,7 @@ $(function () {
     function disableDragAndRotation() {
         var $ships = $playerBoard.find('.ship');
 
-        $ships.each(function(idx, el) {
+        $ships.each(function (idx, el) {
             $(el).draggable('disable');
             $(el).find('.rotate-button').off('click');
         });

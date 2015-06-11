@@ -1,6 +1,6 @@
 @import "./../../node_modules/font-awesome/less/font-awesome";
 
-@cell-size : 30px;
+@cell-size : 50px;
 @gap : 4px;
 
 body {
@@ -15,6 +15,8 @@ div {
 #game-screen {
   #game-view{
     display: flex;
+    margin-top: @cell-size;
+    margin-left: @cell-size;
   }
 
   #enemy-board-container {
@@ -28,15 +30,20 @@ div {
     }
   }
 
+  #your-turn {
+    display: none;
+  }
+
   #game-screen-buttons {
     margin-top: 20px;
-    margin-left: 30px;
+    margin-left: @cell-size;
 
     #waiting-for-enemy {
       font-weight: 600;
       font-size: large;
       color: black;
     }
+
   }
   
   #game-screen-results {
@@ -54,15 +61,12 @@ div {
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    width: 300px;
-    min-width: 300px;
-    height: 300px;
-    margin-top: 30px;
-    margin-left: 30px;
+    width: @cell-size*10;
+    min-width: @cell-size*10;
+    height: @cell-size*10;
   }
 
   #ship-dock {
-    margin-top: 30px;
     vertical-align: top;
   }
 
@@ -89,14 +93,14 @@ div {
       display: none;
       position: absolute;
       background-color: orange;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       bottom: -2px;
       right: -2px;
     }
 
     .glyphicon {
-      padding: 1px;
+      padding: 3px;
     }
 
   }
@@ -111,12 +115,20 @@ div {
   font-weight: 700;
 }
 
-
 .shoot{
   width : @cell-size;
   height : @cell-size;
-  background-color: red;
   position: absolute;
-  border-radius: @cell-size;
 }
 
+#miss {
+  background-image: url("splash.png");
+}
+
+#hit {
+  background-image: url("hit.png");
+}
+
+#sunk {
+  background-image: url("sunk.png");
+}

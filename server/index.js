@@ -91,7 +91,6 @@ io.on('connection', function (socket) {
                 rooms.push(createRoom());
             }
         }
-
         refreshRooms();
     });
 
