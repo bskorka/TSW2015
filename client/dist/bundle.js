@@ -61,7 +61,7 @@
 	
 	var socket = io();
 	
-	var shipsSizes = [2, 2];//, 3, 3, 4, 5];
+	var shipsSizes = [2, 2, 3, 3, 4, 5];
 	var currentRoom;
 	var myName;
 	
