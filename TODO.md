@@ -32,7 +32,7 @@ ZROBIONE
 + collisionBounds statku który zaton¹³ id="miss"
   
 DO ZROBIENIA
-
+- poprawiæ ikonki, ¿eby siê nie zamazywa³y
 - refactoring nazw zmiennych
 - wygl¹d aplikacji
 

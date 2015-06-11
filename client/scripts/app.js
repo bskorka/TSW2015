@@ -157,9 +157,16 @@ $(function () {
                 var $coordinate = $(coordinate);
                 var x = $coordinate[0];
                 var y = $coordinate[1];
-                if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
-                    $enemyBoard.append(createShootMarker(x, y, 'X'));
-                }
+                $.each($c, function (idx, shipCo) {
+                    var $shipCo = $(shipCo);
+                    var bool = (_.isEqual($coordinate, $shipCo));
+                    console.log(!bool);
+                    if(!bool) {
+                        if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
+                            $enemyBoard.append(createShootMarker(x, y, 'X'));
+                        }
+                    }
+                });
             });
         }
     });
@@ -266,13 +273,19 @@ $(function () {
                     });
 
                     $.each($boundsSunkShip, function (idx, coordinate) {
-                        console.log(coordinate);
                         var $coordinate = $(coordinate);
                         var x = $coordinate[0];
                         var y = $coordinate[1];
-                        if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
-                            $playerBoard.append(createShootMarker(x, y, 'X'));
-                        }
+                        $.each(coordinates, function (idx, shipCo) {
+                            var $shipCo = $(shipCo);
+                            var bool = (_.isEqual($coordinate, $shipCo));
+                            console.log(bool);
+                            if(!bool) {
+                                if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
+                                    $playerBoard.append(createShootMarker(x, y, 'X'));
+                                }
+                            }
+                        });
                     });
 
                     $hitShip.remove();
