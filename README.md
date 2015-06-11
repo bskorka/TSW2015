@@ -18,8 +18,8 @@ Na temat swojego projektu zespołowego wybrałem grę w statki.
 - font-awesome - https://www.npmjs.com/package/font-awesome
 - cat-names - https://www.npmjs.com/package/cat-names (nazwy pokojów)
 
-http://devdocs.io/
-https://www.npmjs.com/
+- http://devdocs.io/
+- https://www.npmjs.com/
 
 GRA WSTĘPNIE POSTAWIONA NA HEROKU:
 https://pure-spire-9157.herokuapp.com
