@@ -30,11 +30,12 @@ ZROBIONE
 + kogo kolej? (bootstrap alert info)
 + ikonki - strza³, pud³o, traf, zatopienie
 + collisionBounds statku który zaton¹³ id="miss"
++ poprawiæ ikonki, ¿eby siê nie zamazywa³y
++ refactoring nazw zmiennych
++ wygl¹d aplikacji
   
 DO ZROBIENIA
-- poprawiæ ikonki, ¿eby siê nie zamazywa³y
-- refactoring nazw zmiennych
-- wygl¹d aplikacji
+- NULL
 
 Nie korzystam z oryginalnych socketowych pokojów poniewa¿ zda³em sobie sprawê z mo¿liwoœci ich
 wykorzystania dopiero gdy dosz³o do obs³ugi strza³ów u¿ytkowników. Przyznajê, ¿e moje rozwi¹zanie

@@ -13,6 +13,7 @@ div {
 }
 
 #game-screen {
+
   #game-view{
     display: flex;
     margin-top: @cell-size;
@@ -32,6 +33,9 @@ div {
 
   #your-turn {
     display: none;
+    margin-left: 570px;
+    margin-top: 20px;
+    width: 400px;
   }
 
   #game-screen-buttons {
@@ -48,6 +52,17 @@ div {
   
   #game-screen-results {
     display: none;
+    margin-top: 20px;
+    margin-left: 100px;
+
+    #result {
+      width: 500px;
+    }
+
+    #revengeDecision {
+      margin-top: 20px;
+      width: 500px;
+    }
   }
 
   .cell {
@@ -102,13 +117,61 @@ div {
     .glyphicon {
       padding: 3px;
     }
-
   }
-
 }
 
 .screen {
   display: none;
+}
+
+#login-screen {
+  width: 350px;
+  height: 150px;
+  background-color: lightgrey;
+  border: 2px solid black;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+
+  #nick-input {
+    width: 200px;
+  }
+}
+
+#room-list-screen {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  width: 500px;
+  height: auto;
+  background-color: lightgrey;
+  border: 2px solid black;
+  padding: 5px;
+
+  #room-list {
+    list-style-type: none;
+
+  }
+
+  li {
+    width: 400px;
+    height: 60px;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    border: 1px solid black;
+
+    #joinRoomBtn {
+      margin-left: 10px;
+    }
+
+    span:first-of-type {
+      font-size: large;
+      margin-right: 5px;
+    }
+  }
 }
 
 .validation-msg {

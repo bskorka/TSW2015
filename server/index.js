@@ -117,16 +117,16 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('zatopiony', function (data) {
-        socket.broadcast.emit('zatopiony', data);
+    socket.on('sunk', function (data) {
+        socket.broadcast.emit('sunk', data);
     });
 
-    socket.on('trafiony', function (data) {
-        socket.broadcast.emit('trafiony', data);
+    socket.on('hit', function (data) {
+        socket.broadcast.emit('hit', data);
     });
 
-    socket.on('pudlo', function (data) {
-        socket.broadcast.emit('pudlo', data);
+    socket.on('miss', function (data) {
+        socket.broadcast.emit('miss', data);
     });
 
     socket.on('game_over', function (data) {

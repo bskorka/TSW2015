@@ -61,12 +61,12 @@ $(function () {
             if (room.players.length === 1) {
                 $players.text(' ' + room.players[0].name + ' is waiting for opponent');
             } else if (room.players.length === 2) {
-                $players.text(_.pluck(room.players, ' name').join(" vs "));
+                $players.text(' ' + _.pluck(room.players, 'name').join(" vs "));
             } else {
                 $players.text(' (empty) ');
             }
 
-            var $button = $('<input type="button" class="btn btn-primary" name="join" value="Join"/>');
+            var $button = $('<input type="button" id="joinRoomBtn" class="btn btn-primary" name="join" value="Join"/>');
             $button.prop('disabled', !room.free);
 
             $li.append($label);
@@ -141,37 +141,39 @@ $(function () {
         }
     });
 
-    socket.on('trafiony', function (data) {
+    socket.on('hit', function (data) {
         if (currentRoom && data.roomId === currentRoom.id && data.playerName !== myName) {
             $enemyBoard.append(createShootMarker(data.x, data.y, '?'));
         }
     });
 
-    socket.on('zatopiony', function (data) {
+    socket.on('sunk', function (data) {
         if (currentRoom && data.roomId === currentRoom.id && data.playerName !== myName) {
             $enemyBoard.append(createShootMarker(data.x, data.y, '!'));
-            var $b = $(data.bounds);
-            var $c = $(data.coord);
+            var bounds = data.bounds;
+            var coords = data.coords;
 
-            $.each($b, function (idx, coordinate) {
-                var $coordinate = $(coordinate);
-                var x = $coordinate[0];
-                var y = $coordinate[1];
-                $.each($c, function (idx, shipCo) {
-                    var $shipCo = $(shipCo);
-                    var bool = (_.isEqual($coordinate, $shipCo));
-                    console.log(!bool);
-                    if(!bool) {
-                        if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
-                            $enemyBoard.append(createShootMarker(x, y, 'X'));
-                        }
+            _.each(bounds, function(bound) {
+                var x = bound[0];
+                var y = bound[1];
+                var bool;
+
+                _.each(coords, function(coord){
+                    if(_.isEqual(bound, coord)){
+                        bool = true;
                     }
                 });
+
+                if(!bool){
+                    if((x > -1 && y > -1) && (x < 10 && y < 10)){
+                        $enemyBoard.append(createShootMarker(x, y, 'X'));
+                    }
+                }
             });
         }
     });
 
-    socket.on('pudlo', function (data) {
+    socket.on('miss', function (data) {
         if (currentRoom && data.roomId === currentRoom.id && data.playerName !== myName) {
             $enemyBoard.append(createShootMarker(data.x, data.y, 'X'));
         }
@@ -253,7 +255,7 @@ $(function () {
                 hitCount = hitCount + 1;
                 $hitShip.data('hitCount', hitCount);
                 $playerBoard.append(createShootMarker(x, y, '?'));
-                socket.emit('trafiony', {
+                socket.emit('hit', {
                     roomId: currentRoom.id,
                     playerName: myName,
                     x: x,
@@ -261,31 +263,37 @@ $(function () {
                 });
                 if (hitCount === shipSize) {
                     var $boundsSunkShip = $hitShip.data('collisionBounds');
+                    var $coordinates = $hitShip.data('coordinates');
 
                     $playerBoard.append(createShootMarker(x, y, '!'));
-                    socket.emit('zatopiony', {
+                    socket.emit('sunk', {
                         roomId: currentRoom.id,
                         playerName: myName,
                         x: x,
                         y: y,
                         bounds: $boundsSunkShip,
-                        coord: coordinates
+                        coords: $coordinates
                     });
 
-                    $.each($boundsSunkShip, function (idx, coordinate) {
-                        var $coordinate = $(coordinate);
-                        var x = $coordinate[0];
-                        var y = $coordinate[1];
-                        $.each(coordinates, function (idx, shipCo) {
-                            var $shipCo = $(shipCo);
-                            var bool = (_.isEqual($coordinate, $shipCo));
-                            console.log(bool);
-                            if(!bool) {
-                                if ((x > -1 && y > -1) && (x < 10 && y < 10)) {
-                                    $playerBoard.append(createShootMarker(x, y, 'X'));
-                                }
+                    console.log($boundsSunkShip);
+                    console.log($coordinates);
+
+                    _.each($boundsSunkShip, function(bound) {
+                        var x = bound[0];
+                        var y = bound[1];
+                        var bool;
+
+                        _.each($coordinates, function(coord){
+                            if(_.isEqual(bound, coord)){
+                                bool = true;
                             }
                         });
+
+                        if(!bool){
+                            if((x > -1 && y > -1) && (x < 10 && y < 10)){
+                                $playerBoard.append(createShootMarker(x, y, 'X'));
+                            }
+                        }
                     });
 
                     $hitShip.remove();
@@ -299,7 +307,7 @@ $(function () {
                 }
             } else {
                 $playerBoard.append(createShootMarker(x, y, 'X'));
-                socket.emit('pudlo', {
+                socket.emit('miss', {
                     roomId: currentRoom.id,
                     playerName: myName,
                     x: x,
@@ -565,7 +573,6 @@ $(function () {
 
 
         var $ships = $playerBoard.find('.ship');
-
 
         var collisions = $ships.map(function (idx, el) {
             var $ship = $(el);
